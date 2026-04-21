@@ -51,7 +51,8 @@ app.config["JSON_AS_ASCII"] = False   # important for Hindi text in JSON
 # ─── Settings ─────────────────────────────────────────────────
 DEFAULT_CITY    = "Jodhpur"
 HOST            = "0.0.0.0"    # 0.0.0.0 = accessible on local network
-PORT            = 5000
+import os
+PORT = int(os.environ.get("PORT", 5000))
 DEBUG           = True         # set False when done testing
 CHAT_HISTORY    = []           # stores conversation in memory
 MAX_HISTORY     = 50           # max messages to keep
