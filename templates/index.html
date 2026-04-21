@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>किसान सहायक — Kisan Sahayak</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep:   #1a3a2a;
+    --green-mid:    #2d6a4f;
+    --green-bright: #40916c;
+    --green-light:  #74c69d;
+    --green-pale:   #d8f3dc;
+    --amber:        #f4a823;
+    --amber-pale:   #fff3cd;
+    --earth:        #8b5e3c;
+    --earth-light:  #d4a574;
+    --sky:          #90e0ef;
+    --cream:        #fef9f0;
+    --text-main:    #1a2e1e;
+    --text-muted:   #5a7a62;
+    --border:       rgba(45,106,79,0.18);
+    --shadow:       0 4px 24px rgba(26,58,42,0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--cream);
+    color: var(--text-main);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 0%, rgba(116,198,157,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 100%, rgba(144,224,239,0.12) 0%, transparent 60%);
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--green-deep);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--green-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .brand-text h1 {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .brand-text p {
+    font-size: 11px;
+    color: var(--green-light);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .header-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--green-light);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green-light);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Layout ── */
+  .app-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: calc(100vh - 64px);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    background: #fff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-section {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .city-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+  }
+
+  .city-input-wrap span { font-size: 14px; }
+
+  #city-input {
+    border: none;
+    background: transparent;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    color: var(--text-main);
+    outline: none;
+    width: 100%;
+  }
+
+  /* Quick questions */
+  .quick-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .quick-btn {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 13px;
+    color: var(--text-main);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .quick-btn:hover {
+    background: var(--green-pale);
+    border-color: var(--green-bright);
+    color: var(--green-deep);
+    transform: translateX(2px);
+  }
+
+  .quick-btn .qicon { font-size: 14px; }
+
+  /* Weather widget */
+  .weather-widget {
+    background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+    border-radius: 14px;
+    padding: 14px;
+    color: #fff;
+  }
+
+  .weather-widget .w-city {
+    font-size: 11px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .weather-widget .w-temp {
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .weather-widget .w-desc {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
+  .weather-widget .w-tip {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 11px;
+    opacity: 0.65;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    line-height: 1.5;
+  }
+
+  /* ── Main chat area ── */
+  .chat-area {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-behavior: smooth;
+  }
+
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 4px; }
+
+  /* Welcome message */
+  .welcome-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    max-width: 480px;
+    margin: 2rem auto;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .welcome-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .welcome-card h2 {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 20px;
+    color: var(--green-deep);
+    margin-bottom: 6px;
+  }
+
+  .welcome-card p {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* Message bubbles */
+  .msg-row {
+    display: flex;
+    gap: 10px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .msg-row.user { flex-direction: row-reverse; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-top: 2px;
+  }
+
+  .msg-avatar.bot-av {
+    background: var(--green-deep);
+  }
+
+  .msg-avatar.user-av {
+    background: var(--amber);
+  }
+
+  .msg-bubble {
+    max-width: 68%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    line-height: 1.65;
+    position: relative;
+  }
+
+  .msg-row.bot .msg-bubble {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-top-left-radius: 4px;
+    box-shadow: var(--shadow);
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 15px;
+    color: var(--text-main);
+  }
+
+  .msg-row.user .msg-bubble {
+    background: var(--green-deep);
+    border-top-right-radius: 4px;
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .msg-time {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    padding: 0 4px;
+  }
+
+  .msg-row.user .msg-time { text-align: right; }
+
+  .msg-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .speak-btn {
+    background: var(--green-pale);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--green-mid);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s;
+  }
+
+  .speak-btn:hover {
+    background: var(--green-bright);
+    color: #fff;
+    border-color: var(--green-bright);
+  }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    border-top-left-radius: 4px;
+    width: fit-content;
+    box-shadow: var(--shadow);
+  }
+
+  .typing-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-bright);
+    animation: typingBounce 1.2s infinite ease-in-out;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40%           { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* ── Input bar ── */
+  .input-bar {
+    padding: 1rem 1.5rem;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  #question-input {
+    flex: 1;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 15px;
+    color: var(--text-main);
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+    min-height: 48px;
+    max-height: 120px;
+  }
+
+  #question-input::placeholder {
+    color: var(--text-muted);
+    font-family: 'Tiro Devanagari Hindi', serif;
+  }
+
+  #question-input:focus {
+    border-color: var(--green-bright);
+  }
+
+  .send-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--green-deep);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: var(--green-bright); transform: scale(1.05); }
+  .send-btn:active { transform: scale(0.97); }
+
+  .send-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  .mic-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .mic-btn:hover { background: var(--amber-pale); border-color: var(--amber); }
+  .mic-btn.recording { background: var(--amber); border-color: var(--amber); animation: micPulse 1s infinite; }
+
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(244,168,35,0.4); }
+    50%       { box-shadow: 0 0 0 8px rgba(244,168,35,0); }
+  }
+
+  .mic-btn svg { width: 18px; height: 18px; }
+
+  .input-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    font-family: 'Tiro Devanagari Hindi', serif;
+  }
+
+  /* ── Scrollbar for sidebar ── */
+  .sidebar-scroll {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .sidebar-scroll::-webkit-scrollbar { width: 3px; }
+  .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 4px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .app-layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-brand">
+    <div class="logo-icon">🌾</div>
+    <div class="brand-text">
+      <h1>किसान सहायक</h1>
+      <p>Kisan Sahayak &mdash; Farmer's AI Assistant</p>
+    </div>
+  </div>
+  <div class="header-status">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Connecting...</span>
+  </div>
+</header>
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- City selector -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">आपका शहर / Your City</div>
+      <div class="city-input-wrap">
+        <span>📍</span>
+        <input type="text" id="city-input" placeholder="Jodhpur" value="Jodhpur">
+      </div>
+    </div>
+
+    <!-- Weather widget -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">आज का मौसम</div>
+      <div class="weather-widget" id="weather-widget">
+        <div class="w-city" id="w-city">लोड हो रहा है...</div>
+        <div class="w-temp" id="w-temp">—°C</div>
+        <div class="w-desc" id="w-desc">मौसम जानकारी आ रही है</div>
+        <div class="w-tip" id="w-tip"></div>
+      </div>
+    </div>
+
+    <!-- Quick questions -->
+    <div class="sidebar-section sidebar-scroll">
+      <div class="sidebar-label">जल्दी पूछें</div>
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="sendQuestion('आज का मौसम कैसा है')"><span class="qicon">🌤️</span>आज का मौसम</button>
+        <button class="quick-btn" onclick="sendQuestion('क्या बारिश होगी')"><span class="qicon">🌧️</span>बारिश होगी क्या</button>
+        <button class="quick-btn" onclick="sendQuestion('गेहूं का भाव क्या है')"><span class="qicon">🌾</span>गेहूं का भाव</button>
+        <button class="quick-btn" onclick="sendQuestion('सरसों का दाम बताओ')"><span class="qicon">🌻</span>सरसों का दाम</button>
+        <button class="quick-btn" onclick="sendQuestion('सिंचाई कैसे करें')"><span class="qicon">💧</span>सिंचाई की जानकारी</button>
+        <button class="quick-btn" onclick="sendQuestion('यूरिया खाद कब डालें')"><span class="qicon">🌱</span>यूरिया कब डालें</button>
+        <button class="quick-btn" onclick="sendQuestion('फसल में कीट लग गए')"><span class="qicon">🐛</span>कीट से बचाव</button>
+        <button class="quick-btn" onclick="sendQuestion('पीएम किसान योजना क्या है')"><span class="qicon">🏛️</span>सरकारी योजना</button>
+        <button class="quick-btn" onclick="sendQuestion('रेतीली मिट्टी में क्या उगाएं')"><span class="qicon">🪨</span>मिट्टी की जानकारी</button>
+        <button class="quick-btn" onclick="sendQuestion('जीरा कब बोएं')"><span class="qicon">🌿</span>जीरा की खेती</button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Chat area -->
+  <main class="chat-area">
+    <div class="chat-messages" id="chat-messages">
+      <div class="welcome-card">
+        <div class="welcome-icon">🌾</div>
+        <h2>नमस्ते किसान भाई!</h2>
+        <p>मैं आपका किसान सहायक हूँ।<br>मौसम, फसल, मंडी भाव, खाद, सिंचाई<br>या सरकारी योजना — कुछ भी पूछें।</p>
+      </div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <div class="input-row">
+        <textarea id="question-input" placeholder="यहाँ अपना सवाल लिखें... (Type your question in Hindi)" rows="1"></textarea>
+        <button class="mic-btn" id="mic-btn" title="Voice Input" onclick="startVoiceInput()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="send-btn" onclick="handleSend()" title="Send">
+          <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+        </button>
+      </div>
+      <div class="input-hint">Enter दबाएं या बटन क्लिक करें • माइक बटन से बोल सकते हैं</div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────
+let currentCity = "Jodhpur";
+let isLoading   = false;
+let recognition = null;
+let autoSpeak   = true;
+
+// ─── On Page Load ─────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  checkStatus();
+  loadWeather();
+  setupInput();
+  setupMic();
+
+  // Reload weather every 10 minutes
+  setInterval(loadWeather, 600000);
+});
+
+// ─── Check server status ──────────────────────────────────────
+async function checkStatus() {
+  try {
+    const res  = await fetch("/status");
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById("status-dot").style.background = "#74c69d";
+      document.getElementById("status-text").textContent = "Online";
+      currentCity = data.default_city;
+      document.getElementById("city-input").value = currentCity;
+    }
+  } catch {
+    document.getElementById("status-dot").style.background = "#e74c3c";
+    document.getElementById("status-text").textContent = "Offline";
+  }
+}
+
+// ─── Load weather widget ──────────────────────────────────────
+async function loadWeather() {
+  const city = document.getElementById("city-input").value || "Jodhpur";
+  try {
+    const res  = await fetch(`/weather?city=${encodeURIComponent(city)}`);
+    const data = await res.json();
+    if (data.success) {
+      const text = data.current;
+      document.getElementById("w-city").textContent = city;
+
+      // Extract temp from reply
+      const tempMatch = text.match(/(\d+)\s*डिग्री/);
+      document.getElementById("w-temp").textContent = tempMatch ? tempMatch[1] + "°C" : "—°C";
+
+      // Extract description
+      const parts = text.split("।");
+      document.getElementById("w-desc").textContent = parts[0] || text;
+      document.getElementById("w-tip").textContent  = parts.slice(3).join("।").trim();
+    }
+  } catch {
+    document.getElementById("w-city").textContent = "Error loading";
+  }
+}
+
+// ─── City input change ────────────────────────────────────────
+document.getElementById("city-input").addEventListener("change", () => {
+  currentCity = document.getElementById("city-input").value;
+  loadWeather();
+});
+
+// ─── Send a question ──────────────────────────────────────────
+function sendQuestion(text) {
+  document.getElementById("question-input").value = text;
+  handleSend();
+}
+
+async function handleSend() {
+  const input    = document.getElementById("question-input");
+  const question = input.value.trim();
+  if (!question || isLoading) return;
+
+  input.value = "";
+  input.style.height = "48px";
+
+  addMessage(question, "user");
+  showTyping();
+  isLoading = true;
+
+  try {
+    const city = document.getElementById("city-input").value || "Jodhpur";
+    const res  = await fetch("/ask", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ question, city })
+    });
+    const data = await res.json();
+    hideTyping();
+
+    const answer = data.answer || "माफ करें, कुछ गड़बड़ हुई।";
+    addMessage(answer, "bot", data.time);
+
+    if (autoSpeak) speakText(answer);
+
+  } catch {
+    hideTyping();
+    addMessage("इंटरनेट या सर्वर से कनेक्शन नहीं है।", "bot");
+  } finally {
+    isLoading = false;
+  }
+}
+
+// ─── Add message bubble ───────────────────────────────────────
+function addMessage(text, role, time) {
+  const container = document.getElementById("chat-messages");
+  const row       = document.createElement("div");
+  row.className   = `msg-row ${role}`;
+
+  const avatar = document.createElement("div");
+  avatar.className = `msg-avatar ${role === "bot" ? "bot-av" : "user-av"}`;
+  avatar.textContent = role === "bot" ? "🌾" : "👨‍🌾";
+
+  const inner = document.createElement("div");
+
+  const bubble  = document.createElement("div");
+  bubble.className = "msg-bubble";
+  bubble.textContent = text;
+  inner.appendChild(bubble);
+
+  if (time) {
+    const t = document.createElement("div");
+    t.className = "msg-time";
+    t.textContent = time;
+    inner.appendChild(t);
+  }
+
+  if (role === "bot") {
+    const actions = document.createElement("div");
+    actions.className = "msg-actions";
+    const speakBtn = document.createElement("button");
+    speakBtn.className = "speak-btn";
+    speakBtn.innerHTML = "🔊 सुनें";
+    speakBtn.onclick = () => speakText(text);
+    actions.appendChild(speakBtn);
+    inner.appendChild(actions);
+  }
+
+  if (role === "bot") {
+    row.appendChild(avatar);
+    row.appendChild(inner);
+  } else {
+    row.appendChild(inner);
+    row.appendChild(avatar);
+  }
+
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+}
+
+// ─── Typing indicator ─────────────────────────────────────────
+let typingEl = null;
+
+function showTyping() {
+  const container = document.getElementById("chat-messages");
+  const row = document.createElement("div");
+  row.className = "msg-row bot";
+  row.id = "typing-row";
+
+  const avatar = document.createElement("div");
+  avatar.className = "msg-avatar bot-av";
+  avatar.textContent = "🌾";
+
+  const indicator = document.createElement("div");
+  indicator.className = "typing-indicator";
+  indicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+  row.appendChild(avatar);
+  row.appendChild(indicator);
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+  typingEl = row;
+}
+
+function hideTyping() {
+  if (typingEl) { typingEl.remove(); typingEl = null; }
+}
+
+// ─── Text-to-Speech ───────────────────────────────────────────
+async function speakText(text) {
+  try {
+    const res = await fetch("/speak", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ text })
+    });
+    if (!res.ok) return;
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.play();
+    audio.onended = () => URL.revokeObjectURL(url);
+  } catch { /* TTS not available, skip silently */ }
+}
+
+// ─── Microphone / Speech recognition ─────────────────────────
+function setupMic() {
+  if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+    document.getElementById("mic-btn").style.opacity = "0.4";
+    document.getElementById("mic-btn").title = "Browser mic not supported";
+  }
+}
+
+function startVoiceInput() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("आपका ब्राउज़र माइक्रोफोन को सपोर्ट नहीं करता। Chrome उपयोग करें।");
+    return;
+  }
+
+  const micBtn = document.getElementById("mic-btn");
+  if (recognition) { recognition.stop(); return; }
+
+  recognition = new SpeechRecognition();
+  recognition.lang           = "hi-IN";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  micBtn.classList.add("recording");
+
+  recognition.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    document.getElementById("question-input").value = text;
+    handleSend();
+  };
+
+  recognition.onerror = () => {
+    micBtn.classList.remove("recording");
+    recognition = null;
+  };
+
+  recognition.onend = () => {
+    micBtn.classList.remove("recording");
+    recognition = null;
+  };
+
+  recognition.start();
+}
+
+// ─── Textarea auto-resize + Enter to send ────────────────────
+function setupInput() {
+  const input = document.getElementById("question-input");
+
+  input.addEventListener("input", () => {
+    input.style.height = "48px";
+    input.style.height = Math.min(input.scrollHeight, 120) + "px";
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  });
+}
+</script>
+</body>
+</html>
